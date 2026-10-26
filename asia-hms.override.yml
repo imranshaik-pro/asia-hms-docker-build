@@ -1,0 +1,19 @@
+# ASIA HMS application-only image override.
+# Use together with the existing, unchanged pwd.yml:
+# docker compose -f pwd.yml -f asia-hms.override.yml config --images
+#
+# Do not override MariaDB/Redis storage or run docker compose down -v.
+# The one-time configurator and create-site jobs remain unchanged.
+services:
+  backend:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley
+  frontend:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley
+  websocket:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley
+  queue-long:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley
+  queue-short:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley
+  scheduler:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley
