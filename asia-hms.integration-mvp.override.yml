@@ -2,13 +2,16 @@
 # Use with pwd.yml:
 # docker compose -f pwd.yml -f asia-hms.integration-mvp.override.yml config
 #
-# Configurator regenerates sites/apps.txt; use the same image to keep the
-# asia_hms_integration app registered in the site volume.
+# The one-shot configurator regenerates sites/apps.txt. Both configurator and
+# create-site must use the custom image so all registered apps exist in each
+# command's filesystem. Long-running Frappe services use the same image.
 # Replace (do not append) the demo frontend port binding with loopback-only
 # access. !override requires Docker Compose 2.24.4+.
 # No MariaDB/Redis data-volume definitions are changed.
 services:
   configurator:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
+  create-site:
     image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   backend:
     image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
