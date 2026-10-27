@@ -51,17 +51,18 @@ jobs:
           context: ./frappe_docker
           file: ./frappe_docker/images/layered/Containerfile
           push: true
-          tags: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+          tags: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
           labels: |
             org.opencontainers.image.source=https://github.com/imranshaik-pro/asia-hms-docker-build
           build-args: |
             FRAPPE_PATH=https://github.com/frappe/frappe
             FRAPPE_BRANCH=version-16
+            CACHE_BUST=${{ github.sha }}
           secret-files: |
             apps_json=./apps.integration-mvp.json
 
-      - name: Smoke test image includes custom app (no database changes)
+      - name: Smoke test app is registered in Bench (no database changes)
         run: |
           docker run --rm --entrypoint /bin/sh \
-            ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp \
-            -c 'cd /home/frappe/frappe-bench && test -d apps/asia_hms_integration && bench version'
+            ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2 \
+            -c 'cd /home/frappe/frappe-bench && test -d apps/asia_hms_integration && grep -Fxq asia_hms_integration sites/apps.txt && bench version'
