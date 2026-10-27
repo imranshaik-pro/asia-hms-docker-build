@@ -1,0 +1,18 @@
+# TEST IMAGE ONLY. Do not apply to the existing clinic containers yet.
+# After restoring/validating a BACKED-UP staging site, use with pwd.yml:
+# docker compose -f pwd.yml -f asia-hms.integration-mvp.override.yml config --images
+#
+# This changes only Frappe app images. No DB/Redis volumes are altered.
+services:
+  backend:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+  frontend:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+  websocket:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+  queue-long:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+  queue-short:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+  scheduler:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
