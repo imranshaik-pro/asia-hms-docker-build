@@ -2,8 +2,12 @@
 # After restoring/validating a BACKED-UP staging site, use with pwd.yml:
 # docker compose -f pwd.yml -f asia-hms.integration-mvp.override.yml config --images
 #
+# Include configurator: pwd.yml uses it to regenerate sites/apps.txt.
+# Keeping it on the same image ensures asia_hms_integration stays registered.
 # This changes only Frappe app images. No DB/Redis volumes are altered.
 services:
+  configurator:
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   backend:
     image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   frontend:
