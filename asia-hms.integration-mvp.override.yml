@@ -5,14 +5,14 @@
 # This changes only Frappe app images. No DB/Redis volumes are altered.
 services:
   backend:
-    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   frontend:
-    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   websocket:
-    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   queue-long:
-    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   queue-short:
-    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
   scheduler:
-    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp
+    image: ghcr.io/imranshaik-pro/asia-hms:16-marley-integration-mvp-r2
