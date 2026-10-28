@@ -1,0 +1,68 @@
+name: Build ASIA HMS Pharmacist Review Image
+
+on:
+  push:
+    branches:
+      - feat/pharmacist-review-image
+    paths:
+      - apps.pharmacist-review.json
+      - .github/workflows/build-pharmacist-review.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: asia-hms-pharmacist-review-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build & smoke-test isolated pharmacist quantity review image
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
+    steps:
+      - name: Check out ASIA HMS build configuration
+        uses: actions/checkout@v4
+
+      - name: Check out Frappe Docker build files
+        uses: actions/checkout@v4
+        with:
+          repository: frappe/frappe_docker
+          ref: main
+          path: frappe_docker
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish pharmacist review test image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frappe_docker
+          file: ./frappe_docker/images/layered/Containerfile
+          push: true
+          tags: ghcr.io/imranshaik-pro/asia-hms:16-marley-pharmacist-review-r1
+          labels: |
+            org.opencontainers.image.source=https://github.com/imranshaik-pro/asia-hms-docker-build
+          build-args: |
+            FRAPPE_PATH=https://github.com/frappe/frappe
+            FRAPPE_BRANCH=version-16
+            CACHE_BUST=${{ github.sha }}
+          secret-files: |
+            apps_json=./apps.pharmacist-review.json
+
+      - name: Smoke test app is registered in Bench (no database changes)
+        run: |
+          docker run --rm --entrypoint /bin/sh \
+            ghcr.io/imranshaik-pro/asia-hms:16-marley-pharmacist-review-r1 \
+            -c 'cd /home/frappe/frappe-bench && test -d apps/asia_hms_integration && grep -Fxq asia_hms_integration sites/apps.txt && test -f apps/asia_hms_integration/asia_hms_integration/review.py && test -f apps/asia_hms_integration/asia_hms_integration/public/js/asia_rx_handoff.js && bench version'
